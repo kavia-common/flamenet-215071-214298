@@ -10,15 +10,80 @@ import './App.css';
  * - Hero section with FlameNet title and subtitle
  * - CTA buttons
  * - Placeholder sections for "Documentation Preview" and "Settings"
+ * - Backend status widget (calls /meta on port 3001)
  */
 function App() {
   const [theme, setTheme] = useState('light');
+  const [backendStatus, setBackendStatus] = useState({
+    loading: true,
+    ok: false,
+    name: '',
+    version: '',
+    status: '',
+    error: ''
+  });
 
   // Apply theme to <html> element and set document title to FlameNet
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     document.title = 'FlameNet';
   }, [theme]);
+
+  // Fetch backend meta (or health) from port 3001
+  useEffect(() => {
+    let ignore = false;
+    const controller = new AbortController();
+    const base = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001';
+    const tryMeta = async () => {
+      try {
+        // Try /meta first
+        let res = await fetch(`${base}/meta`, { signal: controller.signal });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (ignore) return;
+        setBackendStatus({
+          loading: false,
+          ok: true,
+          name: data.name || 'FlameNet',
+          version: data.version || '',
+          status: data.status || 'ok',
+          error: ''
+        });
+      } catch (e1) {
+        // Fallback to root health "/"
+        fetch(`${base}/`, { signal: controller.signal })
+          .then(async (res) => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            if (ignore) return;
+            setBackendStatus({
+              loading: false,
+              ok: true,
+              name: 'FlameNet',
+              version: '',
+              status: data.message || 'ok',
+              error: ''
+            });
+          })
+          .catch((e2) => {
+            if (ignore) return;
+            setBackendStatus({
+              loading: false,
+              ok: false,
+              name: '',
+              version: '',
+              status: '',
+              error: e2?.message || e1?.message || 'Failed to reach backend'
+            });
+          });
+      }
+    };
+    tryMeta();
+    return () => {
+      ignore = true;
+      controller.abort();
+    };
+  }, []);
 
   // PUBLIC_INTERFACE
   const toggleTheme = () => {
@@ -27,6 +92,32 @@ function App() {
 
   const openDocs = () => {
     window.open('https://reactjs.org', '_blank', 'noopener,noreferrer');
+  };
+
+  const renderBackendBadge = () => {
+    if (backendStatus.loading) {
+      return <span className="badge badge-loading" aria-live="polite">Checking backend…</span>;
+    }
+    if (backendStatus.ok) {
+      return (
+        <span
+          className="badge badge-ok"
+          title={`Connected to ${backendStatus.name} ${backendStatus.version || ''}`}
+          aria-label="Backend status OK"
+        >
+          🔗 Backend: {backendStatus.status}{backendStatus.version ? ` • v${backendStatus.version}` : ''}
+        </span>
+      );
+    }
+    return (
+      <span
+        className="badge badge-error"
+        title={backendStatus.error}
+        aria-label="Backend status error"
+      >
+        ⚠️ Backend unreachable
+      </span>
+    );
   };
 
   return (
@@ -54,6 +145,7 @@ function App() {
             <a className="btn btn-secondary" href="#settings">
               Open Settings
             </a>
+            {renderBackendBadge()}
           </div>
 
           <div className="sections">
