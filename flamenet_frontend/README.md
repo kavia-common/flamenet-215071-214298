@@ -1,82 +1,48 @@
-# Lightweight React Template for KAVIA
+# FlameNet Frontend
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+This is the FlameNet web UI. It uses React with lightweight, framework-free CSS and follows the FlameNet style guide.
 
 ## Features
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+- Lightweight and fast
+- Responsive, modern UI
+- Theme toggle (light/dark)
+- Landing page with CTA and section placeholders
 
 ## Getting Started
 
-In the project directory, you can run:
+In the project directory:
 
 ### `npm start`
-
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Runs the app in development mode.
+Open http://localhost:3000 to view it in your browser.
 
 ### `npm test`
-
 Launches the test runner in interactive watch mode.
 
 ### `npm run build`
+Builds the app for production to the `build` folder.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## FlameNet Style Guide
 
-## Customization
+The main brand colors are defined as CSS variables in `src/App.css` using the provided style guide:
 
-### Colors
+- Primary: `#3b82f6`
+- Secondary: `#64748b`
+- Success/Accent: `#06b6d4`
+- Error: `#EF4444`
+- Background (dark): `#1f2937`
+- Surface (dark): `#374151`
+- Text on dark: `#f9fafb`
 
-The main brand colors are defined as CSS variables in `src/App.css`:
+You can adjust these tokens in the `:root` and `[data-theme="dark"]` sections of `src/App.css`.
 
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
-```
-
-### Components
-
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
-
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
+## Components
+This template uses pure HTML/CSS. Common styles:
+- Buttons (`.btn`, `.btn-primary`, `.btn-secondary`, `.btn-large`)
 - Container (`.container`)
 - Navigation (`.navbar`)
 - Typography (`.title`, `.subtitle`, `.description`)
 
 ## Learn More
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+React documentation: https://reactjs.org/
